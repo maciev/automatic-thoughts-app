@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useState } from "react";
+import React, { useState } from "react";
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
@@ -10,7 +10,6 @@ const Home: NextPage = () => {
   const [PreviousNotes, setPreviousNotes] = useState(4);
 
   // get state, conert to array
-  const newArray = PreviousNotes;
   const pushArray = [];
   for (let i = 0; i < PreviousNotes.valueOf() + 1; i++) {
     pushArray.push(i);
@@ -18,6 +17,21 @@ const Home: NextPage = () => {
   //remove zeros from array
   pushArray.splice(0, 1);
   console.log(pushArray);
+
+  function NewInput() {
+    function handleEnter(e: React.ChangeEvent<HTMLInputElement> | any) {
+      e.preventDefault();
+      setPreviousNotes((PreviousNotes) => PreviousNotes + 1);
+      console.log("youve logged another entry");
+    }
+    return (
+      <input
+        className="mb-5 bg-slate-500"
+        onKeyDown={handleEnter}
+        type="text"
+      />
+    );
+  }
 
   return (
     <>
@@ -46,7 +60,9 @@ const Home: NextPage = () => {
             <h1>Cognitive Distortion</h1>
             <h1>Reasoning</h1>
           </div>
-          <input className="border-4"></input>
+          {pushArray.map((note, index) => {
+            return <NewInput key={index} />;
+          })}
         </div>
       </main>
     </>
